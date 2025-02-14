@@ -1,0 +1,30 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+  
+    "test":"turbo test",
+    "prepare": "husky install",
+    "type-check": "turbo type-check",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "clean": "node ./clean.js"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "turbo": "^2.4.0"
+  },
+  "packageManager": "pnpm@10.2.1",
+  "engines": {
+    "node": ">=18"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{md,mdx,mjs,yml,yaml,css}": [
+      "prettier --write"
+    ]
+  }
+}
