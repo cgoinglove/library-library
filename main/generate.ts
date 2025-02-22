@@ -27,6 +27,16 @@ function formatPath(categories: string[], moduleName: string): string {
   return `${formattedCategories} -> ${chalk.blueBright(`📄 ${moduleName}.ts`)}`
 }
 
+async function checkIfModuleExists(moduleName: string): Promise<boolean> {
+  try {
+    const { stdout, stderr } = await util.promisify(exec)(`pnpm list ${moduleName}`)
+    console.log({ stdout, stderr })
+    return stdout.includes(moduleName)
+  } catch (error) {
+    return false
+  }
+}
+
 async function promptForSubCategory(paths: string[], moduleName: string): Promise<string[]> {
   let next = false
   if (!paths.length) {
@@ -90,23 +100,43 @@ async function run(): Promise<void> {
   ])
 
   const moduleName = initialAnswers.moduleName
+
+  const moduleExists = await checkIfModuleExists(moduleName)
+
+  if (moduleExists) {
+    const proceedWithExit = await inquirer
+      .prompt([
+        {
+          type: 'list',
+          name: 'proceedWithExit',
+          message: chalk.yellow(`'${moduleName}' is already installed. Do you want to add it again?`),
+          default: 'no',
+          choices: ['no', 'yes'],
+        },
+      ])
+      .then(answer => answer.proceedWithExit == '')
+    if (proceedWithExit) return process.exit(0)
+  }
+
   const finalPaths = await promptForSubCategory([], moduleName)
 
   console.log(chalk.cyan(`📂 Module path: ${formatPath(finalPaths, moduleName)}`))
 
   console.log(chalk.yellowBright(`🚀 Installing module: ${chalk.blue(moduleName)} ...`))
-  try {
-    const { stdout, stderr } = await util.promisify(exec)(`pnpm add ${moduleName}`)
-    if (stdout) {
-      console.log(chalk.green(stdout))
+
+  if (!moduleExists)
+    try {
+      const { stdout, stderr } = await util.promisify(exec)(`pnpm add ${moduleName}`)
+      if (stdout) {
+        console.log(chalk.green(stdout))
+      }
+      if (stderr) {
+        console.error(chalk.red(stderr))
+      }
+    } catch (error) {
+      console.error(chalk.red('Error during module installation:'), error)
+      throw error
     }
-    if (stderr) {
-      console.error(chalk.red(stderr))
-    }
-  } catch (error) {
-    console.error(chalk.red('Error during module installation:'), error)
-    throw error
-  }
 
   const fullPath = `${[ROOT, ...finalPaths].join('/')}/${moduleName}.ts`
   console.log(chalk.cyan(`📄 Creating template file: ${moduleName}.ts`))

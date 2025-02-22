@@ -2,3 +2,4 @@
 - diff-match-patch
 - fast-deep-equal
 - nanoid
+- debug
