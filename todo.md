@@ -3,3 +3,6 @@
 - fast-deep-equal
 - nanoid
 - debug
+- effect
+- rxjs
+- fp-ts
