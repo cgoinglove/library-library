@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "gen:default": "pnpm dlx tsx ./gen/models/default.ts",
-    "gen:llm": "pnpm dlx tsx ./gen/models/with-llm.ts",
+    "gen:default": "pnpm dlx tsx ./cli/models/default.ts",
+    "gen:llm": "pnpm dlx tsx ./cli/models/with-llm.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
@@ -36,7 +36,7 @@
   "dependencies": {
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
-    "sf-chain": "^1.0.1",
+    "sf-chain": "^1.1.4",
     "zod": "^3.24.2"
   }
 }
