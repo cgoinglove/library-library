@@ -36,7 +36,7 @@
   "dependencies": {
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
-    "sf-chain": "^1.1.4",
+    "sf-chain": "^1.1.5",
     "zod": "^3.24.2"
   }
 }

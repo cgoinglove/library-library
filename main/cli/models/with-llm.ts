@@ -1,6 +1,5 @@
 import { ollama } from 'ollama-ai-provider'
 import { generateText } from 'ai'
-import { safe } from 'sf-chain'
 
 const model = ollama('qwen2.5-coder:latest')
 
